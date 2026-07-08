@@ -4,10 +4,10 @@
  */
 
 const LocketState = (() => {
-  const STORAGE_KEY = 'locket_gold_v2';
+  const STORAGE_KEY = 'locket_gold_v3';
 
   const defaultState = {
-    user: { id: 'me', name: 'Bùi Đức Huy', email: 'buiduchuy2010qn@gmail.com', avatar: 'H', isGold: true },
+    user: { id: 'u1', name: 'Bùi Đức Huy', email: 'buiduchuy2010qn@gmail.com', avatar: 'H', isGold: true },
     friends: [
       { id: 'f1', name: 'Minh Anh', avatar: 'M', color: '#FF6B6B', hasNew: true },
       { id: 'f2', name: 'Tuấn Kiệt', avatar: 'T', color: '#4ECDC4', hasNew: false },
@@ -17,7 +17,7 @@ const LocketState = (() => {
     ],
     // Demo users for Admin panel
     users: [
-      { id: 'u1', name: 'Bùi Đức Huy', email: 'buiduchuy2010qn@gmail.com', avatar: 'H', isGold: true, isBanned: false, joinedAt: '2025-01-15T08:00:00Z' },
+      { id: 'u1', name: 'Bùi Đức Huy', email: 'buiduchuy2010qn@gmail.com', avatar: 'H', isGold: true, isBanned: false, joinedAt: '2025-01-15T08:00:00Z', password: null },
       { id: 'u2', name: 'Minh Anh', email: 'minhanh@gmail.com', avatar: 'M', isGold: true, isBanned: false, joinedAt: '2025-03-02T10:00:00Z' },
       { id: 'u3', name: 'Tuấn Kiệt', email: 'tuankiet@gmail.com', avatar: 'T', isGold: false, isBanned: false, joinedAt: '2025-04-10T12:00:00Z' },
       { id: 'u4', name: 'Lan Chi', email: 'lanchi@gmail.com', avatar: 'L', isGold: true, isBanned: false, joinedAt: '2025-05-20T09:00:00Z' },
@@ -42,7 +42,15 @@ const LocketState = (() => {
 
   function load() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      let raw = localStorage.getItem(STORAGE_KEY);
+      // Migrate v2 → v3
+      if (!raw) {
+        const legacy = localStorage.getItem('locket_gold_v2');
+        if (legacy) {
+          localStorage.setItem(STORAGE_KEY, legacy);
+          raw = legacy;
+        }
+      }
       if (raw) {
         const parsed = JSON.parse(raw);
         return {
@@ -54,6 +62,52 @@ const LocketState = (() => {
       }
     } catch (_) { /* ignore */ }
     return JSON.parse(JSON.stringify(defaultState));
+  }
+
+  function findUserByEmail(email) {
+    const e = email.trim().toLowerCase();
+    return state.users.find(u => u.email.toLowerCase() === e);
+  }
+
+  function findUserById(id) {
+    return state.users.find(u => u.id === id);
+  }
+
+  function setActiveUser(user) {
+    state.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar || user.name.charAt(0).toUpperCase(),
+      isGold: user.isGold !== false,
+    };
+    save();
+    return state.user;
+  }
+
+  function setUserPassword(userId, passwordHash) {
+    const u = state.users.find(x => x.id === userId);
+    if (u) {
+      u.password = passwordHash;
+      save();
+    }
+  }
+
+  function registerUser({ name, email, passwordHash }) {
+    const id = 'u' + Date.now();
+    const user = {
+      id,
+      name,
+      email: email.toLowerCase(),
+      password: passwordHash,
+      avatar: name.charAt(0).toUpperCase(),
+      isGold: true,
+      isBanned: false,
+      joinedAt: new Date().toISOString(),
+    };
+    state.users.push(user);
+    setActiveUser(user);
+    return user;
   }
 
   function save() {
@@ -204,5 +258,6 @@ const LocketState = (() => {
     toggleBanUser, toggleGoldUser, getStats,
     simulateIncomingLocket, getFriend, getUserById, groupLocketsByDate,
     getAllViewersForUser, getLatestFriendLocket,
+    findUserByEmail, findUserById, setActiveUser, setUserPassword, registerUser,
   };
 })();

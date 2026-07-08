@@ -40,6 +40,8 @@ const LocketProfile = (() => {
     const state = LocketState.get();
     document.getElementById('profile-name').textContent = state.user.name;
     document.getElementById('profile-avatar').textContent = state.user.avatar;
+    const emailEl = document.getElementById('profile-email');
+    if (emailEl) emailEl.textContent = state.user.email || '';
     document.getElementById('profile-friend-count').textContent =
       `${state.friends.length} bạn bè · Unlimited ✦`;
     document.getElementById('current-theme-label').textContent =
