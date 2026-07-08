@@ -2,7 +2,6 @@ services:
   - type: web
     name: locket-gold
     runtime: static
-    plan: free
     buildCommand: echo "Locket Gold - static deploy"
     staticPublishPath: ./public
     headers:
