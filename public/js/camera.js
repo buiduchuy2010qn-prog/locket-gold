@@ -66,9 +66,7 @@ const LocketCamera = (() => {
   }
 
   function renderFriendScroll() {
-    const container = els['camera-friends-scroll'];
-    if (!container) return;
-    container.innerHTML = LocketState.get().friends.map(f => `
+    const html = LocketState.get().friends.map(f => `
       <button class="friend-avatar-btn" data-friend="${f.id}" type="button">
         <div class="friend-avatar-ring ${f.hasNew ? 'has-new' : ''}">
           <div class="avatar-placeholder" style="color:${f.color}">${f.avatar}</div>
@@ -77,13 +75,18 @@ const LocketCamera = (() => {
       </button>
     `).join('');
 
-    container.querySelectorAll('.friend-avatar-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const friend = LocketState.getFriend(btn.dataset.friend);
-        if (friend?.hasNew) {
-          const locket = LocketState.get().lockets.find(l => l.senderId === friend.id);
-          if (locket) LocketHistory.openDetail(locket.id);
-        }
+    ['camera-friends-scroll', 'camera-friends-scroll-desktop'].forEach(id => {
+      const container = document.getElementById(id);
+      if (!container) return;
+      container.innerHTML = html;
+      container.querySelectorAll('.friend-avatar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const friend = LocketState.getFriend(btn.dataset.friend);
+          if (friend?.hasNew) {
+            const locket = LocketState.get().lockets.find(l => l.senderId === friend.id);
+            if (locket) LocketHistory.openDetail(locket.id);
+          }
+        });
       });
     });
   }

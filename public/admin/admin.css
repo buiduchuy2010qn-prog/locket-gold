@@ -157,8 +157,12 @@ body.admin-body {
 
 @media (max-width: 768px) {
   .admin-layout { flex-direction: column; }
-  .admin-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; padding: 12px; }
+  .admin-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; padding: 12px; overflow-x: auto; }
   .admin-sidebar-logo { width: 100%; padding: 0 0 12px; }
-  .admin-nav-btn { width: auto; padding: 8px 14px; border-radius: 8px; }
+  .admin-nav-btn { width: auto; padding: 8px 14px; border-radius: 8px; flex-shrink: 0; }
   .admin-nav-btn.active { border-right: none; border-bottom: 2px solid var(--gold); }
+  .admin-content { padding: 16px; }
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .admin-table { min-width: 560px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }

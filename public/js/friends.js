@@ -42,7 +42,7 @@ const LocketFriends = (() => {
     );
 
     list.innerHTML = `
-      <div class="flex items-center justify-between mb-2 px-1">
+      <div class="friends-count-row flex items-center justify-between mb-2 px-1">
         <span class="text-sm text-ios-label">${filtered.length} bạn bè</span>
         <span class="text-[10px] text-gold font-semibold">∞ UNLIMITED</span>
       </div>
