@@ -15,7 +15,7 @@ const LocketUI = (() => {
     document.getElementById('btn-top-profile')?.addEventListener('click', () => switchTab('profile', onChange));
 
     document.querySelectorAll('.tab-btn').forEach(b => {
-      if (!b.classList.contains('active')) b.classList.add('text-gray-500');
+      if (!b.classList.contains('active')) b.style.color = '';
     });
   }
 
@@ -24,16 +24,9 @@ const LocketUI = (() => {
     activeTab = tab;
 
     document.querySelectorAll('.tab-btn').forEach(b => {
-      const on = b.dataset.tab === tab;
-      b.classList.toggle('active', on);
-      b.classList.toggle('text-yellow-400', on);
-      b.classList.toggle('text-gray-500', !on);
+      b.classList.toggle('active', b.dataset.tab === tab);
     });
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.dataset.screen === tab));
-
-    // Show/hide friend scroll bar
-    const friendsBar = document.getElementById('friends-bar');
-    if (friendsBar) friendsBar.classList.toggle('hidden', tab !== 'camera');
 
     onChange?.(tab);
   }
@@ -47,7 +40,7 @@ const LocketUI = (() => {
 
   function closeModal(id) {
     const el = document.getElementById(id);
-    if (el) { el.classList.add('hidden'); }
+    if (el) el.classList.add('hidden');
     if (!document.querySelector('.modal:not(.hidden)')) document.body.style.overflow = '';
   }
 

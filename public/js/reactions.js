@@ -14,7 +14,7 @@ const LocketReactions = (() => {
     });
   }
 
-  function rain(emoji, count = 24) {
+  function rain(emoji, count = 28) {
     const container = document.getElementById('emoji-rain');
     if (!container) return;
 
@@ -23,11 +23,11 @@ const LocketReactions = (() => {
       el.className = 'emoji-particle';
       el.textContent = emoji;
       el.style.left = Math.random() * 100 + '%';
-      el.style.animationDuration = (2 + Math.random() * 2) + 's';
-      el.style.animationDelay = (Math.random() * 0.8) + 's';
-      el.style.fontSize = (20 + Math.random() * 20) + 'px';
+      el.style.animationDuration = (1.8 + Math.random() * 2.5) + 's';
+      el.style.animationDelay = (Math.random() * 1) + 's';
+      el.style.fontSize = (18 + Math.random() * 24) + 'px';
       container.appendChild(el);
-      setTimeout(() => el.remove(), 4500);
+      setTimeout(() => el.remove(), 5000);
     }
   }
 
