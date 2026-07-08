@@ -1,0 +1,88 @@
+================================================================================
+  LOCKET GOLD - HƯỚNG DẪN DEPLOY LÊN RENDER (GIỐNG AI PRO STORE)
+================================================================================
+
+Sau khi deploy, bạn sẽ có link dạng:
+  https://locket-gold.onrender.com
+
+Mọi người trên internet đều vào được link này.
+
+Khác ai-pro-store:
+  - Locket Gold là STATIC SITE (HTML/JS) → KHÔNG cần PostgreSQL
+  - KHÔNG bị sleep 15 phút như Web Service Python
+  - Data lưu localStorage trên trình duyệt từng người dùng
+
+--------------------------------------------------------------------------------
+BƯỚC 1: Đưa code lên GitHub
+--------------------------------------------------------------------------------
+1. Cài Git (nếu chưa): https://git-scm.com/download/win
+2. Tạo repo mới: https://github.com/new
+   - Tên ví dụ: locket-gold
+   - Public hoặc Private đều được
+   - KHÔNG tick "Add README" (repo trống)
+3. Mở PowerShell:
+
+   cd C:\Users\DucHuyy\.grok\bin\locket-gold
+   git init
+   git add .
+   git commit -m "Locket Gold Edition"
+   git branch -M main
+   git remote add origin https://github.com/buiduchuy2010qn-prog/locket-gold.git
+   git push -u origin main
+
+   (Đổi TEN-GITHUB/locket-gold thành repo thật của bạn)
+
+--------------------------------------------------------------------------------
+BƯỚC 2A: Deploy bằng Blueprint (giống ai-pro-store — khuyên dùng)
+--------------------------------------------------------------------------------
+1. Vào https://render.com → đăng nhập GitHub
+2. Dashboard → New + → Blueprint
+3. Chọn repo locket-gold vừa push
+4. Render đọc file render.yaml → tạo Static Site tên locket-gold
+5. Bấm Apply → chờ 1-3 phút
+6. Copy link: https://locket-gold.onrender.com
+
+--------------------------------------------------------------------------------
+BƯỚC 2B: Deploy thủ công (nếu không dùng Blueprint)
+--------------------------------------------------------------------------------
+1. Dashboard → New + → Static Site
+2. Connect repo locket-gold
+3. Điền:
+   - Name: locket-gold
+   - Branch: main
+   - Build Command: (để trống hoặc: echo "ok")
+   - Publish Directory: public
+4. Create Static Site → chờ deploy
+
+--------------------------------------------------------------------------------
+BƯỚC 3: Cập nhật sau này (giống ai-pro-store)
+--------------------------------------------------------------------------------
+Mỗi lần sửa code:
+
+   cd C:\Users\DucHuyy\.grok\bin\locket-gold
+   git add .
+   git commit -m "Mo ta thay doi"
+   git push
+
+Render tự deploy lại khi push lên main.
+
+--------------------------------------------------------------------------------
+SO SÁNH VỚI AI PRO STORE
+--------------------------------------------------------------------------------
+|                    | ai-pro-store          | locket-gold           |
+|--------------------|-----------------------|-----------------------|
+| Loại Render        | Web Service (Python)  | Static Site           |
+| Database           | PostgreSQL (free)     | Không cần             |
+| Sleep khi idle     | Có (15 phút)          | Không                 |
+| File cấu hình      | render.yaml           | render.yaml           |
+| Thư mục public     | public/               | public/               |
+| GitHub account     | buiduchuy2010qn-prog  | Tạo repo mới tương tự |
+
+--------------------------------------------------------------------------------
+LƯU Ý
+--------------------------------------------------------------------------------
+- Camera chỉ hoạt động trên HTTPS (Render có sẵn HTTPS)
+- Free tier: giới hạn bandwidth + build minutes/tháng (đủ dùng cá nhân)
+- Domain riêng: Render → locket-gold → Settings → Custom Domain
+
+================================================================================
