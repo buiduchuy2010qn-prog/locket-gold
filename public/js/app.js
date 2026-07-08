@@ -16,7 +16,41 @@ const LocketApp = (() => {
     }
   }
 
+  function initSystemUI() {
+    const settings = LocketState.get().adminSettings;
+    const banner = document.getElementById('system-banner');
+    const toast = document.getElementById('system-toast');
+    if (settings.banner && banner) {
+      banner.textContent = settings.banner;
+      banner.classList.remove('hidden');
+    }
+    if (settings.systemNotification && toast) {
+      toast.textContent = settings.systemNotification;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 5000);
+    }
+
+    document.getElementById('btn-admin-login')?.addEventListener('click', () => {
+      LocketUI.openModal('modal-admin-login');
+    });
+
+    document.getElementById('app-admin-login-form')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('app-admin-email').value;
+      const password = document.getElementById('app-admin-password').value;
+      const result = LocketAuth.login(email, password);
+      const err = document.getElementById('app-admin-error');
+      if (result.ok) {
+        window.location.href = '/admin/';
+      } else {
+        err.textContent = result.error;
+        err.classList.remove('hidden');
+      }
+    });
+  }
+
   function init() {
+    initSystemUI();
     LocketUI.initModalCloses();
     LocketUI.initTabs(onTabChange);
 
